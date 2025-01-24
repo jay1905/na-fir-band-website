@@ -1,0 +1,45 @@
+/* NavBar Styling */
+.nav-bar {
+  background-color: #d1a732;
+  padding: 20px 0;
+  margin: 2rem auto;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* Center items horizontally */
+  justify-content: space-between; /* Center items vertically */
+  max-width: 800px;
+}
+
+.nav-bar .logo h1 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #fff; /* White text for the logo */
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.nav-bar .nav-links ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 15px; /* Space between the links */
+}
+
+.nav-bar .nav-links ul li {
+  margin: 0;
+}
+
+.nav-bar .nav-links ul li a {
+  text-decoration: none;
+  font-size: 16px;
+  color: #fff; /* White text for links */
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: opacity 0.3s ease;
+}
+
+.nav-bar .nav-links ul li a:hover {
+  color: #333333; /* Darker color on hover */
+}
