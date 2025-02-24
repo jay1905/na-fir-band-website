@@ -1,12 +1,11 @@
 import React from 'react';
 import '../styles/HomePage.css';
-import NavBar from './NavBar';
+import BottomNav from './BottomNav';
+import MusicBox from './MusicBox';
 
 const HomePage = () => {
   return (
     <div className="homepage">
-      <NavBar />
-
       {/* Hero Image Section */}
       <div className="hero">
         <img 
@@ -31,7 +30,19 @@ const HomePage = () => {
           <button>Email [Band Name]</button>
           <button>Book [Band Name]</button>
         </div>
+
+        <div className="music-box">
+      <span className="music-text">MUSIC</span>
+    </div>
+
+        {/* Bottom Navigation Section */}
+        <BottomNav />
+        <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}>
+      <MusicBox />
+    </div>
       </div>
+
+
     </div>
   );
 };

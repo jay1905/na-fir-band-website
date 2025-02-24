@@ -1,0 +1,45 @@
+.bottom-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #d1a82d;
+  padding: 20px;
+  font-family: "Arial", sans-serif;
+  color: black;
+}
+
+.nav-item {
+  background: black;
+  color: yellow;
+  padding: 15px 25px;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 5px;
+}
+
+.news-updates {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  background: black;
+  color: yellow;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
+button:hover {
+  background: #333;
+}
