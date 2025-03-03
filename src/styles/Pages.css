@@ -1,0 +1,69 @@
+/* Page layout */
+#wrapper {
+    background-color: #212931;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+#main {
+    background-color: #ffffff;
+    padding: 0;
+    position: relative;
+    margin: 0 auto;
+    max-width: calc(100% - 4rem);
+    width: 72rem;
+}
+
+.wrapper {
+    padding: 6rem 4rem 4rem 4rem;
+    position: relative;
+    width: 100%;
+}
+
+/* Header styles */
+header#header {
+    background-color: transparent;
+    padding: 2rem;
+    text-align: center;
+}
+
+header#header .logo {
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 2.25rem;
+    font-weight: 900;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.wrapper header.major {
+    text-align: center;
+    margin: 0 0 2rem 0;
+}
+
+.wrapper header.major h2 {
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+}
+
+.wrapper p {
+    text-align: center;
+    font-family: "Merriweather", serif;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin: 0 0 2rem 0;
+}
+
+@media screen and (max-width: 736px) {
+    .wrapper {
+        padding: 2rem;
+        width: calc(100% - 2rem);
+    }
+
+    .wrapper header.major h2 {
+        font-size: 2rem;
+    }
+}

@@ -1,0 +1,219 @@
+@import url("https://fonts.googleapis.com/css?family=Merriweather:300,700,300italic,700italic|Source+Sans+Pro:900");
+@import url("fontawesome-all.min.css");
+
+#wrapper {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 1;
+  visibility: visible;
+}
+
+#wrapper > .bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #212931;
+  background-image: url("overlay.png"), linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("bg.jpg");
+  background-size: auto, auto, 100% auto;
+  background-position: center, center, top center;
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-attachment: scroll, scroll, scroll;
+  z-index: -1;
+}
+
+#wrapper.fade-in {
+  opacity: 1;
+}
+
+#intro {
+  color: #ffffff;
+  padding: 8rem 4rem 6rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 100vh;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+#intro h1 {
+  font-size: 5rem;
+  line-height: 1;
+  margin: 0;
+  font-family: "Source Sans Pro", sans-serif;
+  color: #ffffff;
+}
+
+#intro p {
+  font-size: 1.25rem;
+  font-style: italic;
+  margin-top: 0.75rem;
+}
+
+#header {
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 20rem;
+  padding-bottom: 8rem;
+  position: relative;
+  text-align: center;
+  z-index: 2;
+}
+
+#header .logo {
+  border: 5px solid #ffffff;
+  color: #ffffff;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 2.25rem;
+  font-weight: 900;
+  letter-spacing: 0.075em;
+  padding: 1rem 1.75rem;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+#main {
+  background-color: #ffffff;
+  position: relative;
+  margin: 0 auto;
+  width: calc(100% - 4rem);
+  max-width: 72rem;
+  z-index: 2;
+}
+
+#main > * {
+  padding: 4rem 4rem 2rem 4rem;
+  border-top: solid 2px #eeeeee;
+  margin: 0;
+}
+
+#main > *:first-child {
+  border-top: 0;
+}
+
+.post {
+  text-align: center;
+}
+
+.post header.major h2 {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+}
+
+.posts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  text-align: center;
+  width: 100%;
+  padding: 0;
+}
+
+.posts article {
+  padding: 4rem;
+  width: 50%;
+  border: solid 1px #eeeeee;
+}
+
+.posts article:nth-child(2n - 1) {
+  border-left-width: 0;
+}
+
+.posts article:nth-child(-n + 2) {
+  border-top-width: 0;
+}
+
+.image.main {
+  display: block;
+  margin: 4rem 0;
+  width: 100%;
+}
+
+.image.main img {
+  width: 100%;
+}
+
+.icons.alt li a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.icons.alt li {
+  display: inline-block;
+  padding: 0 1rem;
+}
+
+#footer {
+  color: #717981;
+  display: flex;
+  background-color: #f5f5f5;
+  margin: 0 auto;
+  width: calc(100% - 4rem);
+  max-width: 72rem;
+  z-index: 2;
+}
+
+#copyright {
+  color: rgba(255, 255, 255, 0.25);
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.075em;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 4rem auto;
+  width: calc(100% - 4rem);
+  max-width: 72rem;
+}
+
+.button {
+  background-color: transparent;
+  border: 2px solid #212931;
+  color: #212931;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 900;
+  height: 3rem;
+  letter-spacing: 0.075em;
+  line-height: 3rem;
+  padding: 0 2rem;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.button:hover {
+  border-color: #18bfef;
+  color: #18bfef;
+}
+
+@media screen and (max-width: 1280px) {
+  #intro {
+    padding: 6rem 4rem 4rem 4rem;
+  }
+}
+
+@media screen and (max-width: 736px) {
+  #intro {
+    padding: 4rem 2rem 2rem 2rem;
+  }
+
+  #intro h1 {
+    font-size: 3rem;
+  }
+
+  .posts article {
+    width: 100%;
+    border-left-width: 2px !important;
+  }
+}
