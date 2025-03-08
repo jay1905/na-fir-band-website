@@ -36,12 +36,7 @@ const Subtitle = styled.h2.attrs(({ theme }) => ({
   font-weight: 400;
 `;
 
-const Content = styled.div.attrs({
-  style: {
-    opacity: 0,
-    transform: 'translateY(20px)'
-  }
-})`
+const Content = styled.div`
   max-width: 800px;
   margin: 0 auto;
   will-change: transform, opacity;
@@ -61,13 +56,13 @@ const IntroSection = memo(() => {
       if (el?.getBoundingClientRect && document.body.contains(el)) {
         try {
           cleanupRef.current = reveal(el, {
-            delay: 200,
+            delay: 100,
             distance: '20px',
             origin: 'bottom',
-            duration: 800,
+            duration: 600,
             easing: 'cubic-bezier(0.5, 0, 0, 1)',
             scale: 1,
-            opacity: 0,
+            opacity: 1,
             cleanup: true,
             mobile: true,
             container: document.documentElement,

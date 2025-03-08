@@ -11,12 +11,11 @@ import ScrollToTop from './components/common/ScrollToTop';
 import BackToTop from './components/common/BackToTop';
 import { SiteProvider } from './contexts/SiteContext';
 
-const LOADING_DURATION = 1500; // 1.5 seconds for initial loading
+const LOADING_DURATION = 500; // Reduced from 1500 to 500ms
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
-  const loadingRef = useRef(false);
 
   useEffect(() => {
     const startTime = Date.now();
@@ -31,7 +30,7 @@ const App = () => {
         requestAnimationFrame(updateProgress);
       } else {
         setLoadingProgress(100);
-        setTimeout(() => setIsLoading(false), 300); // Small delay for smooth transition
+        setIsLoading(false);
       }
     };
 
@@ -43,21 +42,10 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <SiteProvider>
           <GlobalStyles />
-          {(!loadingRef.current || isLoading) && (
+          {isLoading && (
             <Loading 
               progress={loadingProgress} 
-              isComplete={!isLoading} 
-              onAnimationEnd={() => {
-                if (!isLoading) {
-                  loadingRef.current = true;
-                  // Ensure we re-render after loading screen is gone
-                  setTimeout(() => {
-                    if (window.ScrollReveal) {
-                      window.ScrollReveal().sync();
-                    }
-                  }, 100);
-                }
-              }}
+              isComplete={!isLoading}
             />
           )}
           <ScrollProgress />

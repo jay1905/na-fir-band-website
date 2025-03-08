@@ -24,7 +24,7 @@ const LoadingWrapper = styled.div`
   justify-content: center;
   align-items: center;
   z-index: ${({ theme }) => theme.zIndex.modal + 1};
-  animation: ${({ $isComplete }) => $isComplete ? fadeOut : 'none'} 0.5s ease forwards;
+  animation: ${({ $isComplete }) => $isComplete ? fadeOut : 'none'} 0.3s ease forwards;
 `;
 
 const LogoWrapper = styled.div`
@@ -46,7 +46,7 @@ const Progress = styled.div.attrs(({ $progress }) => ({
 }))`
   height: 100%;
   background-color: ${({ theme }) => theme.colors.accent};
-  transition: width 0.3s ease;
+  transition: width 0.2s ease;
   will-change: width;
 `;
 
@@ -57,18 +57,11 @@ const Logo = styled.h1`
   margin: 0;
 `;
 
-const Loading = ({ progress = 0, isComplete = false }) => {
+const Loading = ({ progress = 0, isComplete = false, onAnimationEnd }) => {
   return (
     <LoadingWrapper 
       $isComplete={isComplete} 
-      onAnimationEnd={() => {
-        if (isComplete) {
-          // Force a ScrollReveal sync after loading completes
-          if (window.ScrollReveal) {
-            window.ScrollReveal().sync();
-          }
-        }
-      }}
+      onAnimationEnd={onAnimationEnd}
     >
       <LogoWrapper>
         <Logo>Na Fir</Logo>

@@ -26,7 +26,6 @@ export const SiteProvider = ({ children }) => {
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
   const scrollRevealRef = useRef(null);
-
   const [isReady, setIsReady] = useState(false);
 
   // Initialize ScrollReveal once
@@ -35,8 +34,8 @@ export const SiteProvider = ({ children }) => {
 
     try {
       scrollRevealRef.current = ScrollReveal({
-        distance: '50px',
-        duration: 1000,
+        distance: '20px',
+        duration: 600,
         easing: 'cubic-bezier(0.5, 0, 0, 1)',
         interval: 0,
         opacity: 0,
@@ -51,16 +50,12 @@ export const SiteProvider = ({ children }) => {
         viewFactor: 0.0,
         viewOffset: { top: 0, right: 0, bottom: 0, left: 0 }
       });
+
       setIsReady(true);
-      
-      // Mark site as complete (this will now happen after loading screen)
-      const timer = setTimeout(() => {
-        setIsFirstRender(false);
-        setIsComplete(true);
-      }, 300);
+      setIsComplete(true); // Set complete immediately
+      setIsFirstRender(false);
 
       return () => {
-        clearTimeout(timer);
         if (scrollRevealRef.current) {
           scrollRevealRef.current.destroy();
           scrollRevealRef.current = null;
@@ -68,11 +63,13 @@ export const SiteProvider = ({ children }) => {
       };
     } catch (err) {
       console.warn('Error initializing ScrollReveal:', err);
+      // Even if ScrollReveal fails, we should still show content
+      setIsComplete(true);
+      setIsFirstRender(false);
     }
   }, []);
 
   useEffect(() => {
-
     // Update scroll progress
     const updateScrollProgress = () => {
       const windowHeight = window.innerHeight;

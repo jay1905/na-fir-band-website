@@ -1,21 +1,21 @@
 export const pageTransition = {
   initial: {
-    opacity: 0,
-    y: 20
+    opacity: 1,
+    y: 0
   },
   animate: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.3,
       ease: [0.6, -0.05, 0.01, 0.99],
     }
   },
   exit: {
     opacity: 0,
-    y: -20,
+    y: -10,
     transition: {
-      duration: 0.4,
+      duration: 0.2,
       ease: [0.6, -0.05, 0.01, 0.99],
     }
   }
@@ -24,21 +24,21 @@ export const pageTransition = {
 export const staggerContainer = {
   animate: {
     transition: {
-      staggerChildren: 0.1
+      staggerChildren: 0.05
     }
   }
 };
 
 export const fadeInUp = {
   initial: {
-    y: 60,
+    y: 20,
     opacity: 0
   },
   animate: {
     y: 0,
     opacity: 1,
     transition: {
-      duration: 0.6,
+      duration: 0.3,
       ease: [0.6, -0.05, 0.01, 0.99]
     }
   }
@@ -51,7 +51,7 @@ export const fadeIn = {
   animate: {
     opacity: 1,
     transition: {
-      duration: 0.6,
+      duration: 0.3,
       ease: "easeOut"
     }
   }
@@ -59,14 +59,14 @@ export const fadeIn = {
 
 export const scaleUp = {
   initial: {
-    scale: 0.8,
+    scale: 0.95,
     opacity: 0
   },
   animate: {
     scale: 1,
     opacity: 1,
     transition: {
-      duration: 0.6,
+      duration: 0.3,
       ease: [0.6, -0.05, 0.01, 0.99]
     }
   }
@@ -74,14 +74,14 @@ export const scaleUp = {
 
 export const slideIn = {
   initial: {
-    x: -60,
+    x: -20,
     opacity: 0
   },
   animate: {
     x: 0,
     opacity: 1,
     transition: {
-      duration: 0.6,
+      duration: 0.3,
       ease: [0.6, -0.05, 0.01, 0.99]
     }
   }

@@ -30,9 +30,7 @@ const PostsGrid = styled.div.attrs(({ theme }) => ({
 
 const Post = styled.article.attrs(({ theme }) => ({
   style: {
-    background: theme.colors.cardBg,
-    opacity: 0,
-    transform: 'translateY(20px)'
+    background: theme.colors.cardBg
   }
 }))`
   border-radius: 8px;
@@ -97,14 +95,14 @@ const HomePage = () => {
       if (elements.every(el => el?.getBoundingClientRect)) {
         const cleanups = elements.map((element, index) => 
           reveal(element, {
-            delay: 1200 + (150 * index), // Start after intro with consistent spacing
+            delay: 200 + (150 * index), // Reduced delay
             distance: '20px',
             origin: 'bottom',
             duration: 600,
             easing: 'cubic-bezier(0.5, 0, 0, 1)',
             cleanup: true,
             scale: 1,
-            opacity: 0,
+            opacity: 1, // Changed from 0
             mobile: true,
             container: document.documentElement,
             beforeReveal: (el) => {
