@@ -1,6 +1,9 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import PageTransition from './common/PageTransition';
+import { staggerContainer, fadeInUp } from '../styles/PageAnimation';
 import BaseLayout from './layout/BaseLayout';
 import LoadingSpinner from './common/LoadingSpinner';
 import ErrorMessage from './common/ErrorMessage';
@@ -8,13 +11,13 @@ import LinkButton from './common/LinkButton';
 import PostImage from './common/PostImage';
 import { usePost, formatDate } from '../hooks/usePosts';
 
-const PostWrapper = styled.article`
+const PostWrapper = styled(motion.article)`
   max-width: 800px;
   margin: 0 auto;
   padding: ${({ theme }) => theme.spacing.xl} 0;
 `;
 
-const PostHeader = styled.header`
+const PostHeader = styled(motion.header)`
   text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
@@ -34,7 +37,7 @@ const PostDate = styled.time`
   font-size: 1rem;
 `;
 
-const PostContent = styled.div`
+const PostContent = styled(motion.div)`
   font-size: 1.1rem;
   line-height: 1.7;
   color: ${({ theme }) => theme.colors.text};
@@ -45,7 +48,7 @@ const PostContent = styled.div`
   }
 `;
 
-const Navigation = styled.nav`
+const Navigation = styled(motion.nav)`
   display: flex;
   justify-content: space-between;
   margin-top: ${({ theme }) => theme.spacing.xl};
@@ -82,17 +85,24 @@ const PostPage = () => {
   }
 
   return (
-    <BaseLayout>
-      <PostWrapper>
-        <PostHeader>
+    <PageTransition>
+      <BaseLayout>
+        <PostWrapper
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+        >
+        <PostHeader variants={fadeInUp}>
           <PostTitle>{post.title}</PostTitle>
           <PostDate>{formatDate(post.date)}</PostDate>
         </PostHeader>
-        <PostImage src={post.image} alt={post.title} />
-        <PostContent>
+        <motion.div variants={fadeInUp}>
+          <PostImage src={post.image} alt={post.title} />
+        </motion.div>
+        <PostContent variants={fadeInUp}>
           {post.content}
         </PostContent>
-        <Navigation>
+        <Navigation variants={fadeInUp}>
           <LinkButton to="/blog">
             ← Back to Blog
           </LinkButton>
@@ -100,8 +110,9 @@ const PostPage = () => {
             Home
           </LinkButton>
         </Navigation>
-      </PostWrapper>
-    </BaseLayout>
+        </PostWrapper>
+      </BaseLayout>
+    </PageTransition>
   );
 };
 

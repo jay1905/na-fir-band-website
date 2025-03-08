@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyles from './styles/GlobalStyles';
 import theme from './styles/theme';
@@ -12,6 +13,19 @@ import BackToTop from './components/common/BackToTop';
 import { SiteProvider } from './contexts/SiteContext';
 
 const LOADING_DURATION = 500; // Reduced from 1500 to 500ms
+
+const RoutesWithAnimation = () => {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/post/:slug" element={<PostPage />} />
+        <Route path="/blog/page/:page" element={<HomePage />} />
+      </Routes>
+    </AnimatePresence>
+  );
+};
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -51,11 +65,7 @@ const App = () => {
           <ScrollProgress />
           <ScrollToTop />
           <BackToTop />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/post/:slug" element={<PostPage />} />
-            <Route path="/blog/page/:page" element={<HomePage />} />
-          </Routes>
+          <RoutesWithAnimation />
         </SiteProvider>
       </ThemeProvider>
     </Router>

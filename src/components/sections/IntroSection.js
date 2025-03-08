@@ -1,7 +1,7 @@
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
-import useFirstVisit from '../../hooks/useFirstVisit';
-import { useSite } from '../../contexts/SiteContext';
+import { motion } from 'framer-motion';
+import { staggerContainer, fadeInUp } from '../../styles/PageAnimation';
 
 const IntroWrapper = styled.section.attrs(({ theme }) => ({
   style: {
@@ -36,7 +36,7 @@ const Subtitle = styled.h2.attrs(({ theme }) => ({
   font-weight: 400;
 `;
 
-const Content = styled.div`
+const Content = styled(motion.div)`
   max-width: 800px;
   margin: 0 auto;
   will-change: transform, opacity;
@@ -44,52 +44,19 @@ const Content = styled.div`
 `;
 
 const IntroSection = memo(() => {
-  const contentRef = useRef(null);
-  const cleanupRef = useRef();
-  const { reveal, isComplete } = useSite();
-
-  useEffect(() => {
-    if (!isComplete) return;
-
-    const timer = setTimeout(() => {
-      const el = contentRef.current;
-      if (el?.getBoundingClientRect && document.body.contains(el)) {
-        try {
-          cleanupRef.current = reveal(el, {
-            delay: 100,
-            distance: '20px',
-            origin: 'bottom',
-            duration: 600,
-            easing: 'cubic-bezier(0.5, 0, 0, 1)',
-            scale: 1,
-            opacity: 1,
-            cleanup: true,
-            mobile: true,
-            container: document.documentElement,
-            beforeReveal: (element) => {
-              return document.body.contains(element);
-            }
-          });
-        } catch (err) {
-          console.warn('Error revealing intro:', err);
-        }
-      }
-    }, 100);
-
-    return () => {
-      clearTimeout(timer);
-      if (cleanupRef.current) {
-        cleanupRef.current();
-        cleanupRef.current = null;
-      }
-    };
-  }, [reveal, isComplete]);
-
   return (
     <IntroWrapper>
-      <Content ref={contentRef}>
-        <Title>Na Fir</Title>
-        <Subtitle>Irish Folk from The Netherlands</Subtitle>
+      <Content
+        variants={staggerContainer}
+        initial="initial"
+        animate="animate"
+      >
+        <motion.div variants={fadeInUp}>
+          <Title>Na Fir</Title>
+        </motion.div>
+        <motion.div variants={fadeInUp}>
+          <Subtitle>Irish Folk from The Netherlands</Subtitle>
+        </motion.div>
       </Content>
     </IntroWrapper>
   );

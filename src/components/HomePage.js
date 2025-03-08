@@ -1,5 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import PageTransition from './common/PageTransition';
+import { staggerContainer, fadeInUp } from '../styles/PageAnimation';
 import BaseLayout from './layout/BaseLayout';
 import IntroSection from './sections/IntroSection';
 import { 
@@ -18,7 +21,7 @@ const Main = styled.main.attrs(({ theme }) => ({
   }
 }))``;
 
-const PostsGrid = styled.div.attrs(({ theme }) => ({
+const PostsGrid = styled(motion.div).attrs(({ theme }) => ({
   style: {
     gap: theme.spacing.lg,
     marginTop: theme.spacing.xl
@@ -28,7 +31,7 @@ const PostsGrid = styled.div.attrs(({ theme }) => ({
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 `;
 
-const Post = styled.article.attrs(({ theme }) => ({
+const Post = styled(motion.article).attrs(({ theme }) => ({
   style: {
     background: theme.colors.cardBg
   }
@@ -80,49 +83,7 @@ const PostExcerpt = styled.p.attrs(({ theme }) => ({
 
 const HomePage = () => {
   const { posts, isLoading, error, totalPages } = usePosts(1, 6);
-  const { reveal, isComplete } = useSite();
   const [currentPage, setCurrentPage] = useState(1);
-  const postsRef = useRef([]);
-
-  useEffect(() => {
-    if (!isComplete || !posts.length) return;
-
-    // Wait for posts to be mounted
-    const timer = setTimeout(() => {
-      const elements = posts.map((_, index) => document.querySelector(`#post-${index}`));
-      
-      // Only proceed if all elements are found and valid
-      if (elements.every(el => el?.getBoundingClientRect)) {
-        const cleanups = elements.map((element, index) => 
-          reveal(element, {
-            delay: 200 + (150 * index), // Reduced delay
-            distance: '20px',
-            origin: 'bottom',
-            duration: 600,
-            easing: 'cubic-bezier(0.5, 0, 0, 1)',
-            cleanup: true,
-            scale: 1,
-            opacity: 1, // Changed from 0
-            mobile: true,
-            container: document.documentElement,
-            beforeReveal: (el) => {
-              // Ensure element is still valid
-              return document.body.contains(el);
-            }
-          })
-        );
-
-        // Store refs for cleanup
-        postsRef.current = cleanups;
-      }
-    }, 200); // Wait for DOM to stabilize
-
-    return () => {
-      clearTimeout(timer);
-      postsRef.current.forEach(cleanup => cleanup && cleanup());
-      postsRef.current = [];
-    };
-  }, [posts, reveal, isComplete]);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -142,12 +103,20 @@ const HomePage = () => {
   );
 
   return (
-    <BaseLayout>
+    <PageTransition>
+      <BaseLayout>
       <IntroSection />
       <Main>
-        <PostsGrid>
+        <PostsGrid
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+        >
           {posts.map((post, index) => (
-            <Post key={post.id} id={`post-${index}`}>
+            <Post 
+              key={post.id}
+              variants={fadeInUp}
+            >
               <PostImage src={post.image} alt={post.title} />
               <PostContent>
                 <PostTitle>{post.title}</PostTitle>
@@ -169,6 +138,7 @@ const HomePage = () => {
         )}
       </Main>
     </BaseLayout>
+    </PageTransition>
   );
 };
 
