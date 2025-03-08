@@ -38,7 +38,7 @@ const Post = styled(motion.article).attrs(({ theme }) => ({
 }))`
   border-radius: 8px;
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
   will-change: transform, opacity;
   visibility: visible;
 

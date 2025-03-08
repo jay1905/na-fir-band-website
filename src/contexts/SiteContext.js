@@ -37,7 +37,7 @@ export const SiteProvider = ({ children }) => {
         distance: '20px',
         duration: 600,
         easing: 'cubic-bezier(0.5, 0, 0, 1)',
-        interval: 0,
+        interval: 100,
         opacity: 0,
         origin: 'bottom',
         scale: 1,
