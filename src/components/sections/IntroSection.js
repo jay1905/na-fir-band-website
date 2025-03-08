@@ -49,12 +49,23 @@ const IntroSection = memo(() => {
       <Content
         variants={staggerContainer}
         initial="initial"
-        animate="animate"
+        whileInView="animate"
+        viewport={{ once: true }}
       >
-        <motion.div variants={fadeInUp}>
+        <motion.div 
+          variants={fadeInUp}
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true }}
+        >
           <Title>Na Fir</Title>
         </motion.div>
-        <motion.div variants={fadeInUp}>
+        <motion.div 
+          variants={fadeInUp}
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true }}
+        >
           <Subtitle>Irish Folk from The Netherlands</Subtitle>
         </motion.div>
       </Content>

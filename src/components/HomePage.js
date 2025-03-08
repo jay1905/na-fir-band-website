@@ -103,19 +103,23 @@ const HomePage = () => {
   );
 
   return (
-    <PageTransition>
-      <BaseLayout>
-      <IntroSection />
-      <Main>
-        <PostsGrid
-          variants={staggerContainer}
-          initial="initial"
-          animate="animate"
+    <BaseLayout>
+      <PageTransition>
+        <IntroSection />
+        <Main>
+          <PostsGrid
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
         >
           {posts.map((post, index) => (
             <Post 
               key={post.id}
               variants={fadeInUp}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true }}
             >
               <PostImage src={post.image} alt={post.title} />
               <PostContent>
@@ -137,8 +141,8 @@ const HomePage = () => {
           />
         )}
       </Main>
+      </PageTransition>
     </BaseLayout>
-    </PageTransition>
   );
 };
 
