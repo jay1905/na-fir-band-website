@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import NavBar from '../NavBar';
 import Footer from '../Footer';
 import BottomNav from '../BottomNav';
@@ -8,23 +8,33 @@ import BackToTop from '../common/BackToTop';
 import { pageTransition } from '../../styles/PageAnimation';
 import Container from './Container';
 
-const Main = styled.main`
+const Main = styled.main.attrs(({ theme }) => ({
+  style: {
+    paddingTop: theme.headerHeight,
+    paddingBottom: window.innerWidth <= parseInt(theme.breakpoints.md) ? theme.spacing.xl : '0'
+  }
+}))`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-top: ${({ theme }) => theme.headerHeight};
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    padding-bottom: ${({ theme }) => theme.spacing.xl};
-  }
 `;
 
-const Content = styled.div`
+const Content = styled.div.attrs(({ $noPadding, theme }) => ({
+  style: {
+    maxWidth: theme.maxWidth,
+    padding: $noPadding ? '0' : 'inherit'
+  }
+}))`
   flex: 1;
   width: 100%;
-  max-width: ${({ theme }) => theme.maxWidth};
   margin: 0 auto;
-  padding: ${({ $noPadding }) => $noPadding ? '0' : 'inherit'};
+  will-change: opacity, transform;
+`;
+
+const AnimatedContent = styled(motion.div)`
+  width: 100%;
+  height: 100%;
+  will-change: opacity, transform;
 `;
 
 const BaseLayout = ({ 
@@ -35,20 +45,35 @@ const BaseLayout = ({
   noBottomNav = false,
   ...props 
 }) => {
+  const [isTransitionComplete, setIsTransitionComplete] = useState(true);
+
   return (
     <>
       {!noNavbar && <NavBar />}
       <Main>
-        <motion.div
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          variants={pageTransition}
-        >
-          <Content $noPadding={noPadding} {...props}>
-            {children}
-          </Content>
-        </motion.div>
+        <AnimatePresence mode="wait">
+          <AnimatedContent
+            key={window.location.pathname}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            variants={pageTransition}
+            onAnimationStart={() => {
+              setIsTransitionComplete(false);
+            }}
+            onAnimationComplete={() => {
+              setIsTransitionComplete(true);
+              // Force ScrollReveal to re-evaluate after animation
+              if (window.ScrollReveal) {
+                window.ScrollReveal().sync();
+              }
+            }}
+          >
+            <Content $noPadding={noPadding} {...props}>
+              {children}
+            </Content>
+          </AnimatedContent>
+        </AnimatePresence>
       </Main>
       {!noFooter && <Footer />}
       {!noBottomNav && <BottomNav />}
@@ -66,19 +91,3 @@ export const PageLayout = ({ children, ...props }) => (
 );
 
 export default BaseLayout;
-
-// Usage examples:
-// Basic layout with all elements:
-// <BaseLayout>
-//   <YourContent />
-// </BaseLayout>
-//
-// Layout without padding:
-// <BaseLayout noPadding>
-//   <YourContent />
-// </BaseLayout>
-//
-// Layout with container:
-// <PageLayout>
-//   <YourContent />
-// </PageLayout>

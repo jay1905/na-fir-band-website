@@ -2,7 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSite } from '../../contexts/SiteContext';
 
-const ProgressBar = styled.div`
+const ProgressBar = styled.div.attrs(({ $progress, $show }) => ({
+  style: {
+    opacity: $show ? 1 : 0,
+    '--progress': `${$progress}%`
+  }
+}))`
   position: fixed;
   top: 0;
   left: 0;
@@ -10,8 +15,8 @@ const ProgressBar = styled.div`
   height: 2px;
   background-color: ${({ theme }) => theme.colors.border};
   z-index: ${({ theme }) => theme.zIndex.header + 1};
-  opacity: ${({ $show }) => $show ? 1 : 0};
   transition: opacity 0.3s ease;
+  will-change: opacity;
 
   &::after {
     content: '';
@@ -19,9 +24,10 @@ const ProgressBar = styled.div`
     top: 0;
     left: 0;
     height: 100%;
-    width: ${({ $progress }) => $progress}%;
+    width: var(--progress);
     background-color: ${({ theme }) => theme.colors.accent};
     transition: width 0.1s ease;
+    will-change: width;
   }
 `;
 

@@ -1,4 +1,23 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import ScrollReveal from 'scrollreveal';
+
+const defaultRevealConfig = {
+  duration: 1000,
+  delay: 200,
+  distance: '20px',
+  easing: 'cubic-bezier(0.5, 0, 0, 1)',
+  interval: 100,
+  opacity: 0,
+  origin: 'bottom',
+  scale: 1,
+  cleanup: true,
+  desktop: true,
+  mobile: true,
+  reset: false,
+  useDelay: 'always',
+  viewFactor: 0.0,
+  viewOffset: { top: 0, right: 0, bottom: 0, left: 0 }
+};
 
 const SiteContext = createContext();
 
@@ -6,13 +25,53 @@ export const SiteProvider = ({ children }) => {
   const [isComplete, setIsComplete] = useState(false);
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const scrollRevealRef = useRef(null);
+
+  const [isReady, setIsReady] = useState(false);
+
+  // Initialize ScrollReveal once
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      scrollRevealRef.current = ScrollReveal({
+        distance: '50px',
+        duration: 1000,
+        easing: 'cubic-bezier(0.5, 0, 0, 1)',
+        interval: 0,
+        opacity: 0,
+        origin: 'bottom',
+        scale: 1,
+        cleanup: true,
+        container: document.documentElement,
+        desktop: true,
+        mobile: true,
+        reset: false,
+        useDelay: 'always',
+        viewFactor: 0.0,
+        viewOffset: { top: 0, right: 0, bottom: 0, left: 0 }
+      });
+      setIsReady(true);
+      
+      // Mark site as complete (this will now happen after loading screen)
+      const timer = setTimeout(() => {
+        setIsFirstRender(false);
+        setIsComplete(true);
+      }, 300);
+
+      return () => {
+        clearTimeout(timer);
+        if (scrollRevealRef.current) {
+          scrollRevealRef.current.destroy();
+          scrollRevealRef.current = null;
+        }
+      };
+    } catch (err) {
+      console.warn('Error initializing ScrollReveal:', err);
+    }
+  }, []);
 
   useEffect(() => {
-    // Mark the first render as complete after a delay
-    const timer = setTimeout(() => {
-      setIsFirstRender(false);
-      setIsComplete(true);
-    }, 100);
 
     // Update scroll progress
     const updateScrollProgress = () => {
@@ -30,16 +89,37 @@ export const SiteProvider = ({ children }) => {
     updateScrollProgress();
 
     return () => {
-      clearTimeout(timer);
       window.removeEventListener('scroll', updateScrollProgress);
       window.removeEventListener('resize', updateScrollProgress);
     };
   }, []);
 
+  const reveal = (target, customConfig = {}) => {
+    if (!scrollRevealRef.current || !target || !target.getBoundingClientRect) {
+      return () => {};
+    }
+
+    try {
+      const config = { ...defaultRevealConfig, ...customConfig };
+      scrollRevealRef.current.reveal(target, config);
+      
+      return () => {
+        if (scrollRevealRef.current) {
+          scrollRevealRef.current.clean(target);
+        }
+      };
+    } catch (err) {
+      console.warn('Error applying ScrollReveal:', err);
+      return () => {};
+    }
+  };
+
   const value = {
     isComplete,
     isFirstRender,
     scrollProgress,
+    reveal,
+    isReady
   };
 
   return (

@@ -39,11 +39,15 @@ const ProgressBar = styled.div`
   overflow: hidden;
 `;
 
-const Progress = styled.div`
-  width: ${({ progress }) => progress}%;
+const Progress = styled.div.attrs(({ $progress }) => ({
+  style: {
+    width: `${$progress}%`
+  }
+}))`
   height: 100%;
   background-color: ${({ theme }) => theme.colors.accent};
   transition: width 0.3s ease;
+  will-change: width;
 `;
 
 const Logo = styled.h1`
@@ -55,12 +59,22 @@ const Logo = styled.h1`
 
 const Loading = ({ progress = 0, isComplete = false }) => {
   return (
-    <LoadingWrapper $isComplete={isComplete}>
+    <LoadingWrapper 
+      $isComplete={isComplete} 
+      onAnimationEnd={() => {
+        if (isComplete) {
+          // Force a ScrollReveal sync after loading completes
+          if (window.ScrollReveal) {
+            window.ScrollReveal().sync();
+          }
+        }
+      }}
+    >
       <LogoWrapper>
         <Logo>Na Fir</Logo>
       </LogoWrapper>
       <ProgressBar>
-        <Progress progress={progress} />
+        <Progress $progress={progress} />
       </ProgressBar>
     </LoadingWrapper>
   );

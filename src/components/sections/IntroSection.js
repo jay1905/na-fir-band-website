@@ -1,66 +1,94 @@
-import React, { useEffect, useRef } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import useScrollReveal from '../../hooks/useScrollReveal';
 import useFirstVisit from '../../hooks/useFirstVisit';
 import { useSite } from '../../contexts/SiteContext';
 
-const IntroWrapper = styled.section`
+const IntroWrapper = styled.section.attrs(({ theme }) => ({
+  style: {
+    padding: `${theme.spacing.xl} 0`,
+    minHeight: `calc(100vh - ${theme.headerHeight})`
+  }
+}))`
   text-align: center;
-  padding: ${({ theme }) => theme.spacing.xl} 0;
-  min-height: calc(100vh - ${({ theme }) => theme.headerHeight});
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
 
-const Title = styled.h1`
-  font-size: 3.5rem;
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
+const Title = styled.h1.attrs(({ theme }) => ({
+  style: {
+    fontSize: window.innerWidth <= parseInt(theme.breakpoints.md) ? '2.5rem' : '3.5rem',
+    marginBottom: theme.spacing.lg,
+    color: theme.colors.text
+  }
+}))`
   font-family: ${({ theme }) => theme.fonts.heading};
-  color: ${({ theme }) => theme.colors.text};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    font-size: 2.5rem;
-  }
 `;
 
-const Subtitle = styled.h2`
-  font-size: 1.5rem;
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-  color: ${({ theme }) => theme.colors.lightText};
+const Subtitle = styled.h2.attrs(({ theme }) => ({
+  style: {
+    fontSize: window.innerWidth <= parseInt(theme.breakpoints.md) ? '1.25rem' : '1.5rem',
+    marginBottom: theme.spacing.xl,
+    color: theme.colors.lightText
+  }
+}))`
   font-weight: 400;
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    font-size: 1.25rem;
-  }
 `;
 
-const Content = styled.div`
+const Content = styled.div.attrs({
+  style: {
+    opacity: 0,
+    transform: 'translateY(20px)'
+  }
+})`
   max-width: 800px;
   margin: 0 auto;
-  opacity: 0;
+  will-change: transform, opacity;
+  visibility: visible;
 `;
 
-const IntroSection = () => {
+const IntroSection = memo(() => {
   const contentRef = useRef(null);
-  const reveal = useScrollReveal();
-  const { isFirstVisit } = useFirstVisit();
-  const { isComplete } = useSite();
+  const cleanupRef = useRef();
+  const { reveal, isComplete } = useSite();
 
   useEffect(() => {
-    if (contentRef.current && isComplete) {
-      const cleanup = reveal(contentRef.current, {
-        delay: isFirstVisit ? 1000 : 200,
-        distance: '50px',
-        origin: 'bottom',
-        duration: 1000,
-        cleanup: true
-      });
+    if (!isComplete) return;
 
-      return () => cleanup();
-    }
-  }, [reveal, isFirstVisit, isComplete]);
+    const timer = setTimeout(() => {
+      const el = contentRef.current;
+      if (el?.getBoundingClientRect && document.body.contains(el)) {
+        try {
+          cleanupRef.current = reveal(el, {
+            delay: 200,
+            distance: '20px',
+            origin: 'bottom',
+            duration: 800,
+            easing: 'cubic-bezier(0.5, 0, 0, 1)',
+            scale: 1,
+            opacity: 0,
+            cleanup: true,
+            mobile: true,
+            container: document.documentElement,
+            beforeReveal: (element) => {
+              return document.body.contains(element);
+            }
+          });
+        } catch (err) {
+          console.warn('Error revealing intro:', err);
+        }
+      }
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      if (cleanupRef.current) {
+        cleanupRef.current();
+        cleanupRef.current = null;
+      }
+    };
+  }, [reveal, isComplete]);
 
   return (
     <IntroWrapper>
@@ -70,6 +98,6 @@ const IntroSection = () => {
       </Content>
     </IntroWrapper>
   );
-};
+});
 
 export default IntroSection;

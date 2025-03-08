@@ -2,15 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import useWindowSize from '../../hooks/useWindowSize';
 
-const StyledContainer = styled.div`
+const StyledContainer = styled.div.attrs(({ theme, $fluid, $noPadding }) => {
+  const isSmallScreen = window.innerWidth <= parseInt(theme.breakpoints.sm);
+  return {
+    style: {
+      maxWidth: $fluid ? '100%' : theme.maxWidth,
+      padding: $noPadding ? '0' : `0 ${isSmallScreen ? theme.spacing.sm : theme.spacing.md}`
+    }
+  };
+})`
   width: 100%;
-  max-width: ${({ theme, $fluid }) => $fluid ? '100%' : theme.maxWidth};
   margin: 0 auto;
-  padding: ${({ $noPadding, theme }) => $noPadding ? '0' : `0 ${theme.spacing.md}`};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: ${({ $noPadding, theme }) => $noPadding ? '0' : `0 ${theme.spacing.sm}`};
-  }
 `;
 
 const Container = ({

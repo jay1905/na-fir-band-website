@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyles from './styles/GlobalStyles';
@@ -11,11 +11,12 @@ import ScrollToTop from './components/common/ScrollToTop';
 import BackToTop from './components/common/BackToTop';
 import { SiteProvider } from './contexts/SiteContext';
 
-const LOADING_DURATION = 2000; // 2 seconds for initial loading
+const LOADING_DURATION = 1500; // 1.5 seconds for initial loading
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const loadingRef = useRef(false);
 
   useEffect(() => {
     const startTime = Date.now();
@@ -42,7 +43,23 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <SiteProvider>
           <GlobalStyles />
-          <Loading progress={loadingProgress} isComplete={!isLoading} />
+          {(!loadingRef.current || isLoading) && (
+            <Loading 
+              progress={loadingProgress} 
+              isComplete={!isLoading} 
+              onAnimationEnd={() => {
+                if (!isLoading) {
+                  loadingRef.current = true;
+                  // Ensure we re-render after loading screen is gone
+                  setTimeout(() => {
+                    if (window.ScrollReveal) {
+                      window.ScrollReveal().sync();
+                    }
+                  }, 100);
+                }
+              }}
+            />
+          )}
           <ScrollProgress />
           <ScrollToTop />
           <BackToTop />
