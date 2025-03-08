@@ -89,7 +89,7 @@ const IntroSection = memo(() => {
     <IntroWrapper>
       <Content ref={contentRef}>
         <Title>Na Fir</Title>
-        <Subtitle>Celtic Folk Metal from Germany</Subtitle>
+        <Subtitle>Irish Folk from The Netherlands</Subtitle>
       </Content>
     </IntroWrapper>
   );
